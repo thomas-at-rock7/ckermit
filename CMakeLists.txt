@@ -26,7 +26,6 @@ add_custom_command(OUTPUT ${CKCPRO_TARGET}
 set (CMAKE_C_FLAGG "${CMAKE_C_FLAGS} -O -pipe -funsigned-char")
 add_definitions(-DLINUX -DFNFLOAT -DCK_POSIX_SIG -DCK_NEWTERM -DTCPSOCKET -DLINUXFSSTND -DNOCOTFMC -DPOSIX -DUSE_STRERROR -DCK_NCURSES -DHAVE_PTMX  -DHAVE_CRYPT_H  -DHAVE_OPENPTY -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64  -DKTARGET="linux")
 
-#-lutil   -lncurses -lresolv -lcrypt  -lm
 find_library(LIB_UTIL util)
 find_library(LIB_NCURSES ncurses)
 find_library(LIB_RESOLV resolv)
@@ -67,3 +66,4 @@ add_executable(${CMAKE_PROJECT_NAME}
                ck_ssl.c)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC ${LIB_UTIL} ${LIB_NCURSES} ${LIB_RESOLV} ${LIB_CRYPT} ${LIB_M})
+install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION bin)
