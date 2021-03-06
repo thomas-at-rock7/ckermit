@@ -17,11 +17,17 @@ endif()
 set (CKCPRO_TARGET "${CMAKE_CURRENT_SOURCE_DIR}/ckcpro.c")
 set (WART_BINARY "wart")
 
-add_executable(${WART_BINARY} ckwart.c)
-add_custom_command(OUTPUT ${CKCPRO_TARGET}
-                   COMMAND ${WART_BINARY} "${CMAKE_CURRENT_SOURCE_DIR}/ckcpro.w" ${CKCPRO_TARGET}
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   DEPENDS ${WART_BINARY})
+# Only add the wart executable when we're not cross compiling. When cross
+# compiling, some pre configure steps are needed so that the host has access to
+# wart excutable
+if (NOT CMAKE_CROSSCOMPILING)
+    add_executable(${WART_BINARY} ckwart.c)
+    add_custom_command(OUTPUT ${CKCPRO_TARGET}
+                       COMMAND "${CMAKE_CURRENT_BINARY_DIR}/${WART_BINARY}" "${CMAKE_CURRENT_SOURCE_DIR}/ckcpro.w" ${CKCPRO_TARGET}
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                       DEPENDS ${WART_BINARY})
+endif ()
+
 
 set (CMAKE_C_FLAGG "${CMAKE_C_FLAGS} -O -pipe -funsigned-char")
 add_definitions(-DLINUX -DFNFLOAT -DCK_POSIX_SIG -DCK_NEWTERM -DTCPSOCKET -DLINUXFSSTND -DNOCOTFMC -DPOSIX -DUSE_STRERROR -DCK_NCURSES -DHAVE_PTMX  -DHAVE_CRYPT_H  -DHAVE_OPENPTY -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64  -DKTARGET="linux")
